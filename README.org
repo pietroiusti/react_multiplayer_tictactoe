@@ -1,0 +1,8 @@
+multiplayer tictactoe using react and websocket.
+
+(To preprocess the js in src:
+To install babel:
+#+begin_src
+npm install babel-cli@6 babel-preset-react-app@3
+#+end_src
+(See: https://reactjs.org/docs/add-react-to-a-website.html))
