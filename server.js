@@ -1,6 +1,7 @@
 "use strict";
 const fs = require('fs');
 const http = require('http');
+const WebSocket = require('ws');
 
 const server = http.createServer((req, res) => {
   console.log(`requested: ${req.url}`);
@@ -37,4 +38,42 @@ const server = http.createServer((req, res) => {
   }
 });
 
-server.listen(3000);
+server.listen(process.env.PORT || 3000);
+
+/*                  */
+/* WEBSOCKET SERVER */
+/*                  */
+const wss = new WebSocket.Server({ server });
+
+let rooms = [
+  // {
+  //   number: '666',
+  //   next: 'X',
+  //   users: [{ws: {...}, mark: 'X'}]
+  //   board: ...
+  // },
+  // {
+  //   number: '777',
+  //   next: 'O',
+  //   users: [{ws: {...}, mark: 'X'}, {ws: {}, mark: 'O'}]
+  //   board: ...
+  // }
+  
+];
+
+wss.on('connection', (ws) => {
+  console.log('CONNECTION');
+
+  ws.on('message', (req) => {
+    console.log('MESSAGE');
+    req = JSON.parse(req);
+    console.log(req);
+
+    ws.send(JSON.stringify("hello"));
+    
+  });
+
+  ws.on('close', (e) => {
+    console.log('CLOSING');
+  });
+});

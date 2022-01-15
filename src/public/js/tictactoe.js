@@ -1,111 +1,148 @@
-function Square(props) {
-  return (
-    <td className="square" onClick={props.onClick}>
-      {props.value}
-    </td>
-  );
-}
+(function startApp () {
 
-class Board extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      squares: Array(9).fill(null),
-      xIsNext: true,
+  const HOST = location.origin.replace(/^http/, 'ws');
+  const ws = new WebSocket(HOST);
+
+  /* WS */
+  ws.onopen = function() {
+    console.log('WebSocket Client Connected');
+
+    ws.send(JSON.stringify({
+      type: 'connection',
+      foo: 'foobar'
+    }));
+
+    ws.onmessage = function(e) {
+      console.log('Message received from server');
+      console.log(JSON.parse(e.data));
     };
-  }
-  
-  renderSquare(i) {
-    return (
-      <Square 
-        value={this.state.squares[i]}
-        onClick={() => this.handleClick(i)}
-      />
-    );
-  }
-  
-  handleClick(i) {
-    const squares = this.state.squares.slice();
-    if (calculateWinner(squares) || squares[i])
-      return;
-    squares[i] = this.state.xIsNext ? 'X' : 'O';
-    this.setState({
-      squares: squares,
-      xIsNext: !this.state.xIsNext
-    });
-  } 
-  
-  render() {
-    const winner = calculateWinner(this.state.squares);
-    let status;
-    if (winner)
-      status = 'Winner: ' + winner;
-    else
-      status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
-    
-    return (
-    <div>
-      <div className="status">{status}</div>
-      <table>
-      <tbody>
-        <tr className="row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </tr>
-        <tr className="row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </tr>
-        <tr className="row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </tr>
-      </tbody>
-      </table>
-    </div>
-    );
-  }
-}
+  };
+  /* WS */
 
-class Game extends React.Component {
-  render(){
+  function ModalBg(props) {
     return (
-      <div className="game">
-        <div id="board">
-          <Board />  
-        </div>
-        <div id="info">
-          
+      <div className="modal-bg">
+        <div className="modal-content">
+          <input autofocus="true" type="text" placeholder="Choose Room Number"/>
+          <button id="roomButton">Enter</button>
+          <div id="error-message"></div>
         </div>
       </div>
     );
-  }  
-}
+  }
+  
+  function Square(props) {
+    return (
+      <td className="square" onClick={props.onClick}>
+        {props.value}
+      </td>
+    );
+  }
+  
+  class Board extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+	squares: Array(9).fill(null),
+	xIsNext: true,
+      };
+    }
+    
+    renderSquare(i) {
+      return (
+	<Square 
+          value={this.state.squares[i]}
+          onClick={() => this.handleClick(i)}
+	/>
+      );
+    }
+    
+    handleClick(i) {
 
-ReactDOM.render(
-  <Game />,
-  document.getElementById('root')
-);
+      ws.send(JSON.stringify({type: 'click'}));
 
-function calculateWinner(squares) {
-  const lines = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6],
-  ];
-  for (let i = 0; i < lines.length; i++) {
-    const [a, b, c] = lines[i];
-    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
+      const squares = this.state.squares.slice();
+      if (calculateWinner(squares) || squares[i])
+	return;
+      squares[i] = this.state.xIsNext ? 'X' : 'O';
+      this.setState({
+	squares: squares,
+	xIsNext: !this.state.xIsNext
+      });
+    } 
+    
+    render() {
+      const winner = calculateWinner(this.state.squares);
+      let status;
+      if (winner)
+	status = 'Winner: ' + winner;
+      else
+	status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+      
+      return (
+	<div>
+	  <div className="status">{status}</div>
+	  <table>
+	    <tbody>
+              <tr className="row">
+                {this.renderSquare(0)}
+                {this.renderSquare(1)}
+                {this.renderSquare(2)}
+              </tr>
+              <tr className="row">
+                {this.renderSquare(3)}
+                {this.renderSquare(4)}
+                {this.renderSquare(5)}
+              </tr>
+              <tr className="row">
+                {this.renderSquare(6)}
+                {this.renderSquare(7)}
+                {this.renderSquare(8)}
+              </tr>
+	    </tbody>
+	  </table>
+	</div>
+      );
     }
   }
-  return null;
-}
+
+  class Game extends React.Component {
+    render(){
+      return (
+	<div className="game">
+          <ModalBg />
+          <div id="board">
+            <Board />  
+          </div>
+          <div id="info">
+          </div>
+	</div>
+      );
+    }  
+  }
+
+  ReactDOM.render(
+    <Game />,
+    document.getElementById('root')
+  );
+
+  function calculateWinner(squares) {
+    const lines = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6],
+    ];
+    for (let i = 0; i < lines.length; i++) {
+      const [a, b, c] = lines[i];
+      if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+	return squares[a];
+      }
+    }
+    return null;
+  }
+})();
