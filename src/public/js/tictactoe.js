@@ -3,7 +3,7 @@
   const HOST = location.origin.replace(/^http/, 'ws');
   const ws = new WebSocket(HOST);
 
-  /* WS */
+  /* WS #################################################### */
   ws.onopen = function() {
     console.log('WebSocket Client Connected');
 
@@ -17,20 +17,55 @@
       console.log(JSON.parse(e.data));
     };
   };
-  /* WS */
+  /* WS #################################################### */
 
-  function ModalBg(props) {
-    return (
-      <div className="modal-bg">
-        <div className="modal-content">
-          <input autofocus="true" type="text" placeholder="Choose Room Number"/>
-          <button id="roomButton">Enter</button>
-          <div id="error-message"></div>
+  let roomNumber;
+  let mark;
+
+  // function ModalBg(props) {
+  //   function hideModalBg1() { // This works but it doesn't look like ``the react way''...
+  //     document.querySelector('.modal-bg').style.display = 'none';
+  //     roomNumber = document.getElementsByTagName('input')[0].value;
+  //     console.log(roomNumber);
+  //   }
+  //   return (
+  //     <div className="modal-bg">
+  //       <div className="modal-content">
+  //         <input autofocus="true" type="text" placeholder="Choose Room Number"/>
+  //         <button id="roomButton" onClick={()=>hideModalBg1()}>Enter</button>
+  //         <div id="error-message"></div>
+  //       </div>
+  //     </div>
+  //   );
+  // }
+
+  class ModalBg extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+	display: 'flex'
+      };
+    }    
+    
+    hideModalBg1() {      
+      this.setState({
+        display: 'none'
+      });
+    }
+
+    render() {
+      return (
+        <div className="modal-bg" style={{display: this.state.display}}>
+          <div className="modal-content">
+            <input autofocus="true" type="text" placeholder="Choose Room Number"/>
+            <button id="roomButton" onClick={()=>this.hideModalBg1()}>Enter</button>
+            <div id="error-message"></div>
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
   }
-  
+
   function Square(props) {
     return (
       <td className="square" onClick={props.onClick}>

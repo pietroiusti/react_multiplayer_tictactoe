@@ -13,7 +13,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
   var HOST = location.origin.replace(/^http/, 'ws');
   var ws = new WebSocket(HOST);
 
-  /* WS */
+  /* WS #################################################### */
   ws.onopen = function () {
     console.log('WebSocket Client Connected');
 
@@ -27,25 +27,76 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
       console.log(JSON.parse(e.data));
     };
   };
-  /* WS */
+  /* WS #################################################### */
 
-  function ModalBg(props) {
-    return React.createElement(
-      'div',
-      { className: 'modal-bg' },
-      React.createElement(
-        'div',
-        { className: 'modal-content' },
-        React.createElement('input', { autofocus: 'true', type: 'text', placeholder: 'Choose Room Number' }),
-        React.createElement(
-          'button',
-          { id: 'roomButton' },
-          'Enter'
-        ),
-        React.createElement('div', { id: 'error-message' })
-      )
-    );
-  }
+  var roomNumber = void 0;
+  var mark = void 0;
+
+  // function ModalBg(props) {
+  //   function hideModalBg1() { // This works but it doesn't look like ``the react way''...
+  //     document.querySelector('.modal-bg').style.display = 'none';
+  //     roomNumber = document.getElementsByTagName('input')[0].value;
+  //     console.log(roomNumber);
+  //   }
+  //   return (
+  //     <div className="modal-bg">
+  //       <div className="modal-content">
+  //         <input autofocus="true" type="text" placeholder="Choose Room Number"/>
+  //         <button id="roomButton" onClick={()=>hideModalBg1()}>Enter</button>
+  //         <div id="error-message"></div>
+  //       </div>
+  //     </div>
+  //   );
+  // }
+
+  var ModalBg = function (_React$Component) {
+    _inherits(ModalBg, _React$Component);
+
+    function ModalBg(props) {
+      _classCallCheck(this, ModalBg);
+
+      var _this = _possibleConstructorReturn(this, (ModalBg.__proto__ || Object.getPrototypeOf(ModalBg)).call(this, props));
+
+      _this.state = {
+        display: 'flex'
+      };
+      return _this;
+    }
+
+    _createClass(ModalBg, [{
+      key: 'hideModalBg1',
+      value: function hideModalBg1() {
+        this.setState({
+          display: 'none'
+        });
+      }
+    }, {
+      key: 'render',
+      value: function render() {
+        var _this2 = this;
+
+        return React.createElement(
+          'div',
+          { className: 'modal-bg', style: { display: this.state.display } },
+          React.createElement(
+            'div',
+            { className: 'modal-content' },
+            React.createElement('input', { autofocus: 'true', type: 'text', placeholder: 'Choose Room Number' }),
+            React.createElement(
+              'button',
+              { id: 'roomButton', onClick: function onClick() {
+                  return _this2.hideModalBg1();
+                } },
+              'Enter'
+            ),
+            React.createElement('div', { id: 'error-message' })
+          )
+        );
+      }
+    }]);
+
+    return ModalBg;
+  }(React.Component);
 
   function Square(props) {
     return React.createElement(
@@ -55,30 +106,30 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
     );
   }
 
-  var Board = function (_React$Component) {
-    _inherits(Board, _React$Component);
+  var Board = function (_React$Component2) {
+    _inherits(Board, _React$Component2);
 
     function Board(props) {
       _classCallCheck(this, Board);
 
-      var _this = _possibleConstructorReturn(this, (Board.__proto__ || Object.getPrototypeOf(Board)).call(this, props));
+      var _this3 = _possibleConstructorReturn(this, (Board.__proto__ || Object.getPrototypeOf(Board)).call(this, props));
 
-      _this.state = {
+      _this3.state = {
         squares: Array(9).fill(null),
         xIsNext: true
       };
-      return _this;
+      return _this3;
     }
 
     _createClass(Board, [{
       key: 'renderSquare',
       value: function renderSquare(i) {
-        var _this2 = this;
+        var _this4 = this;
 
         return React.createElement(Square, {
           value: this.state.squares[i],
           onClick: function onClick() {
-            return _this2.handleClick(i);
+            return _this4.handleClick(i);
           }
         });
       }
@@ -147,8 +198,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
     return Board;
   }(React.Component);
 
-  var Game = function (_React$Component2) {
-    _inherits(Game, _React$Component2);
+  var Game = function (_React$Component3) {
+    _inherits(Game, _React$Component3);
 
     function Game() {
       _classCallCheck(this, Game);
