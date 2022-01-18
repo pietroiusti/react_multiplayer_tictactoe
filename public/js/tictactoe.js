@@ -60,13 +60,23 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
       _this.state = {
         display: 'flex'
       };
-      _this.hideModalBg = _this.hideModalBg.bind(_this);
+      _this.handleKeyUp = _this.handleKeyUp.bind(_this);
+      _this.handleClick = _this.handleClick.bind(_this);
       return _this;
     }
 
     _createClass(ModalBg, [{
-      key: 'hideModalBg',
-      value: function hideModalBg() {
+      key: 'handleKeyUp',
+      value: function handleKeyUp(e) {
+        if (e.keyCode == 13) {
+          this.setState({
+            display: 'none'
+          });
+        }
+      }
+    }, {
+      key: 'handleClick',
+      value: function handleClick() {
         this.setState({
           display: 'none'
         });
@@ -76,14 +86,14 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
       value: function render() {
         return React.createElement(
           'div',
-          { className: 'modal-bg', style: { display: this.state.display } },
+          { className: 'modal-bg', onKeyUp: this.handleKeyUp, style: { display: this.state.display } },
           React.createElement(
             'div',
             { className: 'modal-content' },
             React.createElement('input', { autofocus: 'true', type: 'text', placeholder: 'Choose Room Number' }),
             React.createElement(
               'button',
-              { id: 'roomButton', onClick: this.hideModalBg },
+              { id: 'roomButton', onClick: this.handleClick },
               'Enter'
             ),
             React.createElement('div', { id: 'error-message' })
