@@ -60,12 +60,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
       _this.state = {
         display: 'flex'
       };
+      _this.hideModalBg = _this.hideModalBg.bind(_this);
       return _this;
     }
 
     _createClass(ModalBg, [{
-      key: 'hideModalBg1',
-      value: function hideModalBg1() {
+      key: 'hideModalBg',
+      value: function hideModalBg() {
         this.setState({
           display: 'none'
         });
@@ -73,8 +74,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
     }, {
       key: 'render',
       value: function render() {
-        var _this2 = this;
-
         return React.createElement(
           'div',
           { className: 'modal-bg', style: { display: this.state.display } },
@@ -84,9 +83,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
             React.createElement('input', { autofocus: 'true', type: 'text', placeholder: 'Choose Room Number' }),
             React.createElement(
               'button',
-              { id: 'roomButton', onClick: function onClick() {
-                  return _this2.hideModalBg1();
-                } },
+              { id: 'roomButton', onClick: this.hideModalBg },
               'Enter'
             ),
             React.createElement('div', { id: 'error-message' })
@@ -112,24 +109,24 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
     function Board(props) {
       _classCallCheck(this, Board);
 
-      var _this3 = _possibleConstructorReturn(this, (Board.__proto__ || Object.getPrototypeOf(Board)).call(this, props));
+      var _this2 = _possibleConstructorReturn(this, (Board.__proto__ || Object.getPrototypeOf(Board)).call(this, props));
 
-      _this3.state = {
+      _this2.state = {
         squares: Array(9).fill(null),
         xIsNext: true
       };
-      return _this3;
+      return _this2;
     }
 
     _createClass(Board, [{
       key: 'renderSquare',
       value: function renderSquare(i) {
-        var _this4 = this;
+        var _this3 = this;
 
         return React.createElement(Square, {
           value: this.state.squares[i],
           onClick: function onClick() {
-            return _this4.handleClick(i);
+            return _this3.handleClick(i);
           }
         });
       }

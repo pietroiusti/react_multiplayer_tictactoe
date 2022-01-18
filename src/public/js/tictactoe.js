@@ -45,9 +45,10 @@
       this.state = {
 	display: 'flex'
       };
+      this.hideModalBg = this.hideModalBg.bind(this);
     }    
     
-    hideModalBg1() {      
+    hideModalBg () {
       this.setState({
         display: 'none'
       });
@@ -58,7 +59,7 @@
         <div className="modal-bg" style={{display: this.state.display}}>
           <div className="modal-content">
             <input autofocus="true" type="text" placeholder="Choose Room Number"/>
-            <button id="roomButton" onClick={()=>this.hideModalBg1()}>Enter</button>
+            <button id="roomButton" onClick={this.hideModalBg}>Enter</button>
             <div id="error-message"></div>
           </div>
         </div>
