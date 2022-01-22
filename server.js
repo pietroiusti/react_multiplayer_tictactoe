@@ -62,18 +62,28 @@ let rooms = [
 ];
 
 wss.on('connection', (ws) => {
-  console.log('CONNECTION');
+  console.log('WebSocket Server Connected');
 
   ws.on('message', (req) => {
-    console.log('MESSAGE');
+    console.log('Message Received:');
     req = JSON.parse(req);
     console.log(req);
 
-    ws.send(JSON.stringify("hello"));
-    
+    // ws.send(JSON.stringify("hello"));
+
+    if (req.type === 'connection') {
+      console.log(`Connecting to room ${req.roomNumber}... (not really...)\n\n`);
+
+      console.log(`Sending a message of type 'hideModalAndShowBoard' to client.`);
+      console.log(`TODO: make client hide modal and show board`);
+
+      ws.send(JSON.stringify({
+	type: 'hideModalAndShowBoard',
+      }));
+    }
   });
 
   ws.on('close', (e) => {
-    console.log('CLOSING');
+    console.log('WebSocket Server Closed');
   });
 });
