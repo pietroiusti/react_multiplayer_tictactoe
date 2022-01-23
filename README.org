@@ -1,8 +1,5 @@
-multiplayer tictactoe using react and websocket.
+Initial setup for writing a multiplayer tictactoe using react and
+websocket.
 
-(To preprocess the js in src:
-To install babel:
-#+begin_src
-npm install babel-cli@6 babel-preset-react-app@3
-#+end_src
-(See: https://reactjs.org/docs/add-react-to-a-website.html))
+Based on [[https://github.com/pietroiusti/basic-server-plus-preprocessed-react-example][basic-server-plus-preprocessed-react-example]] and
+[[https://github.com/pietroiusti/multiplayer-tic-tac-toe][multiplayer-tic-tac-toe]].
