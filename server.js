@@ -72,10 +72,9 @@ wss.on('connection', (ws) => {
     // ws.send(JSON.stringify("hello"));
 
     if (req.type === 'connection') {
-      console.log(`Connecting to room ${req.roomNumber}... (not really...)\n\n`);
-
+      console.log(`Connecting to room ${req.roomNumber}... (not really...)`);
+      // if connection went well:
       console.log(`Sending a message of type 'hideModalAndShowBoard' to client.`);
-      console.log(`TODO: make client hide modal and show board`);
 
       ws.send(JSON.stringify({
 	type: 'hideModalAndShowBoard',

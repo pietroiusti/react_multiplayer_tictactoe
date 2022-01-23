@@ -9,21 +9,36 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var HOST = location.origin.replace(/^http/, 'ws');
-var ws = new WebSocket(HOST);
+// const ws = new WebSocket(HOST);
 
-ws.onopen = function () {
-  console.log('WebSocket Client Connected');
+// ws.onopen = function() {
+//   console.log('WebSocket Client Connected');
 
-  // ws.send(JSON.stringify({
-  //   type: 'connection',
-  //   foo: 'foobar'
-  // }));
+//   // ws.send(JSON.stringify({
+//   //   type: 'connection',
+//   //   foo: 'foobar'
+//   // }));
 
-  ws.onmessage = function (e) {
-    console.log('Message Received:');
-    console.log(JSON.parse(e.data));
-  };
-};
+//   // ws.onmessage = function(e) {
+//   //   let message = JSON.parse(e.data);
+
+//   //   console.log('Message Received:');
+//   //   console.log(message);
+
+//   //   if (message.type === 'hideModalAndShowBoar')
+//   //     console.log('I should hide the modal and show the board...');
+//   // };
+// };
+
+// ws.onmessage = function(e) {
+// let message = JSON.parse(e.data);
+
+// console.log('Message Received:');
+// console.log(message);
+
+// if (message.type === 'hideModalAndShowBoard')
+//   console.log('I should hide the modal and show the board...');
+// };
 
 var ModalBg = function (_React$Component) {
   _inherits(ModalBg, _React$Component);
@@ -86,7 +101,11 @@ var Board = function (_React$Component2) {
   _createClass(Board, [{
     key: 'render',
     value: function render() {
-      return React.createElement('div', null);
+      return React.createElement(
+        'div',
+        null,
+        'BOARD HERE (TODO)'
+      );
     }
   }]);
 
@@ -110,6 +129,26 @@ var Game = function (_React$Component3) {
   }
 
   _createClass(Game, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var _this5 = this;
+
+      this.ws = new WebSocket(HOST);
+      this.ws.onopen = function () {
+        console.log('WebSocket Client Connected');
+      };
+      this.ws.onmessage = function (e) {
+        var message = JSON.parse(e.data);
+        console.log('Message Received:');
+        console.log(message);
+
+        if (message.type === 'hideModalAndShowBoard') {
+          console.log('hideModalAndShowBoard message received...');
+          _this5.setState({ hideModalAndShowBoard: true });
+        }
+      };
+    }
+  }, {
     key: 'hideModalAndShowBoard',
     value: function hideModalAndShowBoard() {
       //this.setState({hideModalAndShowBoard: true});
@@ -118,13 +157,9 @@ var Game = function (_React$Component3) {
   }, {
     key: 'handleSubmit',
     value: function handleSubmit(value) {
-      // console.log('hola');
-
-      console.log(value);
-
-      ws.send(JSON.stringify({
+      this.ws.send(JSON.stringify({
         type: 'connection',
-        roomNumber: 666
+        roomNumber: value
       }));
     }
   }, {

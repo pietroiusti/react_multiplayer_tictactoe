@@ -1,20 +1,35 @@
 "use strict";
 const HOST = location.origin.replace(/^http/, 'ws');
-const ws = new WebSocket(HOST);
+// const ws = new WebSocket(HOST);
 
-ws.onopen = function() {
-  console.log('WebSocket Client Connected');
+// ws.onopen = function() {
+//   console.log('WebSocket Client Connected');
 
-  // ws.send(JSON.stringify({
-  //   type: 'connection',
-  //   foo: 'foobar'
-  // }));
+//   // ws.send(JSON.stringify({
+//   //   type: 'connection',
+//   //   foo: 'foobar'
+//   // }));
 
-  ws.onmessage = function(e) {
-    console.log('Message Received:');
-    console.log(JSON.parse(e.data));
-  };
-};
+//   // ws.onmessage = function(e) {
+//   //   let message = JSON.parse(e.data);
+
+//   //   console.log('Message Received:');
+//   //   console.log(message);
+    
+//   //   if (message.type === 'hideModalAndShowBoar')
+//   //     console.log('I should hide the modal and show the board...');
+//   // };
+// };
+
+// ws.onmessage = function(e) {
+  // let message = JSON.parse(e.data);
+  
+  // console.log('Message Received:');
+  // console.log(message);
+  
+  // if (message.type === 'hideModalAndShowBoard')
+  //   console.log('I should hide the modal and show the board...');
+// };
 
 class ModalBg extends React.Component {
   constructor(props) {
@@ -46,7 +61,7 @@ class ModalBg extends React.Component {
 class Board extends React.Component {
   render() {
     return (
-      <div></div>
+      <div>BOARD HERE (TODO)</div>
     );
   }
 }
@@ -61,19 +76,32 @@ class Game extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  componentDidMount() {
+    this.ws = new WebSocket(HOST);
+    this.ws.onopen = () => {
+      console.log('WebSocket Client Connected');
+    };
+    this.ws.onmessage = (e) => {
+      let message = JSON.parse(e.data);
+      console.log('Message Received:');
+      console.log(message);
+      
+      if (message.type === 'hideModalAndShowBoard') {
+        console.log('hideModalAndShowBoard message received...');
+        this.setState({hideModalAndShowBoard: true});
+      }
+    };
+  }
+
   hideModalAndShowBoard() {
     //this.setState({hideModalAndShowBoard: true});
     console.log('hello there');
   }
 
   handleSubmit(value) {
-    // console.log('hola');
-   
-    console.log(value);
-
-    ws.send(JSON.stringify({
+    this.ws.send(JSON.stringify({
       type: 'connection',
-      roomNumber: 666,
+      roomNumber: value,
     }));
   }
 
